@@ -13,7 +13,10 @@ fn main() {
     let secret_key = Some("t9nGEsDxjWtJYdYeExdB6/HU0vg+rT6czv6HSjVjZng=".as_bytes());
     let threads = num_cpus::get();
 
-    let rt = tokio::runtime::Builder::new_current_thread().enable_all().build().expect("failed to build tokio rt");
+    let rt = tokio::runtime::Builder::new_current_thread()
+        .enable_all()
+        .build()
+        .expect("failed to build tokio rt");
 
     for memory_size in &MEMORY_SIZES {
         for iterations in &ITERATIONS {
@@ -30,7 +33,9 @@ fn main() {
                 argon2_async::set_config(config).await;
 
                 let now = Instant::now();
-                argon2_async::hash(PASSWORD).await.expect("failed to run hasher");
+                argon2_async::hash(PASSWORD)
+                    .await
+                    .expect("failed to run hasher");
                 now.elapsed()
             });
             let millis =

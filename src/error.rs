@@ -12,7 +12,7 @@ pub enum Error {
     /// The password string handling library threw an error
     PasswordHash(password_hash::Error),
     /// The global configuration has not been set.
-    MissingConfig
+    MissingConfig,
 }
 
 impl Display for Error {
@@ -22,7 +22,7 @@ impl Display for Error {
             Error::Communication => f.write_str("background thread communication failure"),
             Error::Argon(e) => write!(f, "error in argon2 hashing algorithm: {}", e),
             Error::PasswordHash(e) => write!(f, "error in password handling lib: {}", e),
-            Error::MissingConfig => f.write_str("global configuration has not been set")
+            Error::MissingConfig => f.write_str("global configuration has not been set"),
         }
     }
 }

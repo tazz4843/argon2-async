@@ -3,7 +3,11 @@ use argon2::{Argon2, Params, PasswordHasher};
 use password_hash::{Salt, SaltString};
 
 pub(crate) async fn get_hasher<'a>() -> Result<Argon2<'a>> {
-    let config = crate::config::GLOBAL_CONFIG.get().ok_or(Error::MissingConfig)?.read().await;
+    let config = crate::config::GLOBAL_CONFIG
+        .get()
+        .ok_or(Error::MissingConfig)?
+        .read()
+        .await;
 
     let Config {
         algorithm,
@@ -59,7 +63,9 @@ pub async fn hash(password: impl AsRef<[u8]>) -> crate::Result<String> {
     let res = crate::spawn_task::spawn_task(move |x| {
         let salt_str = SaltString::generate(rand::thread_rng());
         let salt = Salt::from(&salt_str);
-        let output = hasher.hash_password(&*password, &salt).map(|x| x.serialize().to_string());
+        let output = hasher
+            .hash_password(&*password, &salt)
+            .map(|x| x.serialize().to_string());
         let _ = x.send(output);
     });
 

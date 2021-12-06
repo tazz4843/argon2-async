@@ -10,7 +10,7 @@ pub async fn set_config(config: Config<'static>) {
             let mut cfg = cfg.write().await;
             *cfg = config;
         }
-        None => assert!(GLOBAL_CONFIG.set(tokio::sync::RwLock::new(config)).is_ok())
+        None => assert!(GLOBAL_CONFIG.set(tokio::sync::RwLock::new(config)).is_ok()),
     }
 }
 
