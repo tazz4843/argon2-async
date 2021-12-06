@@ -2,7 +2,7 @@ use crate::{Config, Error, Result};
 use argon2::{Argon2, Params, PasswordHasher};
 use password_hash::{Salt, SaltString};
 
-async fn get_hasher<'a>() -> Result<Argon2<'a>> {
+pub(crate) async fn get_hasher<'a>() -> Result<Argon2<'a>> {
     let config = crate::config::GLOBAL_CONFIG.get().ok_or(Error::MissingConfig)?.read().await;
 
     let Config {
