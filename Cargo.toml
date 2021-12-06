@@ -3,6 +3,12 @@ name = "argon2-async"
 version = "0.1.0"
 edition = "2021"
 authors = ["0/0 <zero@imaskeleton.me>"]
+readme = "README.md"
+description = "async wrapper for the argon2 crate"
+license = "MIT"
+documentation = "https://docs.rs/argon2-async"
+homepage = "https://github.com/tazz4843/argon2-async"
+repository = "https://github.com/tazz4843/argon2-async"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
