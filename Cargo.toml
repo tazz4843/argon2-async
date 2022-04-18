@@ -1,6 +1,6 @@
 [package]
 name = "argon2-async"
-version = "0.1.1"
+version = "0.1.2"
 edition = "2021"
 authors = ["0/0 <zero@imaskeleton.me>"]
 readme = "README.md"
@@ -19,10 +19,9 @@ async-std-rt = ["async-std"]
 default = ["tokio-rt"]
 
 [dependencies]
-password-hash = "0.3.2"
 rand = "0.8.4"
 num_cpus = "1.13"
-argon2 = { version = "0.3", features = ["parallel", "password-hash"] }
+argon2 = { version = "0.4", features = ["parallel"] }
 tokio = { version = "1.14", default-features = false, features = ["sync"] }
 once_cell = { version = "1.8", default-features = false, features = ["std"] }
 
