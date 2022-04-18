@@ -1,12 +1,12 @@
 use std::fmt::{Debug, Display, Formatter};
-use tokio::sync::oneshot::error::RecvError;
+use tokio::task::JoinError;
 
 #[derive(Debug)]
 #[non_exhaustive]
 /// All possible errors that can happen.
 pub enum Error {
     /// An error was encountered while waiting for a background thread to complete.
-    Communication,
+    Join(JoinError),
     /// The underlying Argon2 hashing implementation threw an error.
     Argon(argon2::Error),
     /// The password string handling library threw an error
@@ -19,7 +19,7 @@ impl Display for Error {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         f.write_str("error while hashing: ")?;
         match self {
-            Error::Communication => f.write_str("background thread communication failure"),
+            Error::Join(e) => write!(f, "tokio background thread errored: {}", e),
             Error::Argon(e) => write!(f, "error in argon2 hashing algorithm: {}", e),
             Error::PasswordHash(e) => write!(f, "error in password handling lib: {}", e),
             Error::MissingConfig => f.write_str("global configuration has not been set"),
@@ -29,9 +29,9 @@ impl Display for Error {
 
 impl std::error::Error for Error {}
 
-impl From<tokio::sync::oneshot::error::RecvError> for Error {
-    fn from(_: RecvError) -> Self {
-        Self::Communication
+impl From<JoinError> for Error {
+    fn from(e: JoinError) -> Self {
+        Self::Join(e)
     }
 }
 

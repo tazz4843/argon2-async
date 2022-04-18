@@ -15,11 +15,10 @@ use std::convert::identity;
 /// * communication between threads fails
 pub async fn verify<'a>(password: String, hash: String) -> Result<bool> {
     let hasher = crate::get_hasher().await?;
-    let res = crate::spawn_task::spawn_task(move |tx| {
-        let res = password_hash::PasswordHash::try_from(hash.as_ref())
+    let res = tokio::task::spawn_blocking(move || {
+        password_hash::PasswordHash::try_from(hash.as_ref())
             .map(|hash| hasher.verify_password(password.as_bytes(), &hash))
-            .and_then(identity);
-        let _ = tx.send(res);
+            .and_then(identity)
     })
     .await?;
     match res {

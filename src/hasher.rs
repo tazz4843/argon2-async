@@ -36,14 +36,13 @@ pub async fn hash_raw(password: impl AsRef<[u8]>) -> crate::Result<Vec<u8>> {
     let hasher = get_hasher().await?;
     let password = password.as_ref().to_owned();
 
-    let res = crate::spawn_task::spawn_task(move |x| {
+    let res = tokio::task::spawn_blocking(move || {
         let salt_str = SaltString::generate(rand::thread_rng());
         let salt = salt_str.as_salt();
         let mut output = Vec::new();
-        let output = hasher
+        hasher
             .hash_password_into(&*password, salt.as_bytes(), &mut output)
-            .map(|_| output);
-        let _ = x.send(output);
+            .map(|_| output)
     });
 
     Ok(res.await??)
@@ -60,13 +59,12 @@ pub async fn hash(password: impl AsRef<[u8]>) -> crate::Result<String> {
     let hasher = get_hasher().await?;
     let password = password.as_ref().to_owned();
 
-    let res = crate::spawn_task::spawn_task(move |x| {
+    let res = tokio::task::spawn_blocking(move || {
         let salt_str = SaltString::generate(rand::thread_rng());
         let salt = Salt::from(&salt_str);
-        let output = hasher
+        hasher
             .hash_password(&*password, &salt)
-            .map(|x| x.serialize().to_string());
-        let _ = x.send(output);
+            .map(|x| x.serialize().to_string())
     });
 
     Ok(res.await??)

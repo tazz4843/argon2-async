@@ -7,7 +7,6 @@
 mod config;
 mod error;
 mod hasher;
-mod spawn_task;
 mod verifier;
 
 /// A type helper for every result returned by this crate.
