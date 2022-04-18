@@ -10,7 +10,7 @@ pub enum Error {
     /// The underlying Argon2 hashing implementation threw an error.
     Argon(argon2::Error),
     /// The password string handling library threw an error
-    PasswordHash(password_hash::Error),
+    PasswordHash(argon2::password_hash::Error),
     /// The global configuration has not been set.
     MissingConfig,
 }
@@ -41,8 +41,8 @@ impl From<argon2::Error> for Error {
     }
 }
 
-impl From<password_hash::Error> for Error {
-    fn from(e: password_hash::Error) -> Self {
+impl From<argon2::password_hash::Error> for Error {
+    fn from(e: argon2::password_hash::Error) -> Self {
         Self::PasswordHash(e)
     }
 }
